@@ -131,4 +131,15 @@ void main() {
     expect(box.length, equals(0));
     expect(box.readSync('k1'), isNull);
   });
+
+  test(
+    'initialize without explicit path succeeds with auto-resolved path',
+    () async {
+      final box = await stow.initialize('unspecified_path_box');
+      expect(box.boxName, equals('unspecified_path_box'));
+      await box.write('auto_key', Uint8List.fromList([42, 43]));
+      expect(box.readSync('auto_key'), equals(Uint8List.fromList([42, 43])));
+      await box.close();
+    },
+  );
 }

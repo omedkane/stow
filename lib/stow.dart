@@ -5,6 +5,7 @@ import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'stow_bindings_generated.dart';
 
@@ -47,7 +48,8 @@ class Stow {
   /// Initializes or opens a box named [boxName].
   ///
   /// Optionally accepts [path] to specify the directory where the database file
-  /// will be stored. If omitted, Stow defaults to `./.stow`.
+  /// will be stored. If omitted, Stow defaults to the application documents directory
+  /// (on mobile/desktop Flutter apps) or `./.stow` (in CLI/test environments).
   static Future<Stow> initialize(String boxName, {String? path}) async {
     if (_openBoxes.containsKey(boxName)) {
       final existing = _openBoxes[boxName]!;
@@ -55,11 +57,22 @@ class Stow {
       return existing;
     }
 
+    String? resolvedPath = path;
+    if (resolvedPath == null) {
+      try {
+        final docDir = await getApplicationDocumentsDirectory();
+        resolvedPath = '${docDir.path}/stow';
+      } catch (_) {
+        // Fallback for tests or pure Dart environments where Flutter binding / path_provider is unavailable.
+        resolvedPath = null;
+      }
+    }
+
     final handle = await Isolate.run(() {
       return using((arena) {
         final namePtr = boxName.toNativeUtf8(allocator: arena);
-        final pathPtr = path != null
-            ? path.toNativeUtf8(allocator: arena)
+        final pathPtr = resolvedPath != null
+            ? resolvedPath.toNativeUtf8(allocator: arena)
             : ffi.nullptr.cast<ffi.Char>();
         final outHandle = arena<ffi.Uint64>();
 
@@ -77,7 +90,7 @@ class Stow {
       });
     });
 
-    final newBox = Stow._(boxName, path, handle);
+    final newBox = Stow._(boxName, resolvedPath, handle);
     _openBoxes[boxName] = newBox;
     _defaultBox = newBox;
     return newBox;
