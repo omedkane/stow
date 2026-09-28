@@ -1,0 +1,15 @@
+# Run with `dart run ffigen --config ffigen.yaml`.
+name: StowBindings
+description: |
+  Bindings for `src/stow.h`.
+
+  Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
+output: 'lib/stow_bindings_generated.dart'
+headers:
+  entry-points:
+    - 'src/stow.h'
+  include-directives:
+    - 'src/stow.h'
+comments:
+  style: any
+  length: full

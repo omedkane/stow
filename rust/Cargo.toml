@@ -1,0 +1,12 @@
+[package]
+name = "stow"
+version = "0.0.1"
+edition = "2021"
+authors = ["Stow Authors"]
+description = "Blazing fast native key-value storage engine for Flutter and Dart"
+
+[lib]
+name = "stow"
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
