@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:stow/stow.dart' as stow;
 
@@ -89,7 +90,10 @@ class _MyAppState extends State<MyApp> {
               spacer,
               const Text('1. Box initialized: "demo_box"', style: bodyStyle),
               spacer,
-              Text('2. Entries count before removal: $_boxCount', style: bodyStyle),
+              Text(
+                '2. Entries count before removal: $_boxCount',
+                style: bodyStyle,
+              ),
               spacer,
               Text(
                 '3. readSync("sample_bytes"): ${_syncBytes != null ? _syncBytes.toString() : "null"}',

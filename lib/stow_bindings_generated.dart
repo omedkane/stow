@@ -273,14 +273,28 @@ class StowBindings {
 // Native Asset Bindings (Zero-overhead direct link via build hook)
 // ---------------------------------------------------------------------------
 
-@ffi.Native<ffi.Int32 Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Uint64>)>(symbol: 'stow_init_box')
+@ffi.Native<
+  ffi.Int32 Function(
+    ffi.Pointer<ffi.Char>,
+    ffi.Pointer<ffi.Char>,
+    ffi.Pointer<ffi.Uint64>,
+  )
+>(symbol: 'stow_init_box')
 external int nativeStowInitBox(
   ffi.Pointer<ffi.Char> name,
   ffi.Pointer<ffi.Char> path,
   ffi.Pointer<ffi.Uint64> out_handle,
 );
 
-@ffi.Native<ffi.Int32 Function(ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Size, ffi.Pointer<ffi.Pointer<ffi.Uint8>>, ffi.Pointer<ffi.Size>)>(symbol: 'stow_read')
+@ffi.Native<
+  ffi.Int32 Function(
+    ffi.Uint64,
+    ffi.Pointer<ffi.Uint8>,
+    ffi.Size,
+    ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
+    ffi.Pointer<ffi.Size>,
+  )
+>(symbol: 'stow_read')
 external int nativeStowRead(
   int handle,
   ffi.Pointer<ffi.Uint8> key_ptr,
@@ -289,7 +303,15 @@ external int nativeStowRead(
   ffi.Pointer<ffi.Size> out_val_len,
 );
 
-@ffi.Native<ffi.Int32 Function(ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Size, ffi.Pointer<ffi.Uint8>, ffi.Size)>(symbol: 'stow_write')
+@ffi.Native<
+  ffi.Int32 Function(
+    ffi.Uint64,
+    ffi.Pointer<ffi.Uint8>,
+    ffi.Size,
+    ffi.Pointer<ffi.Uint8>,
+    ffi.Size,
+  )
+>(symbol: 'stow_write')
 external int nativeStowWrite(
   int handle,
   ffi.Pointer<ffi.Uint8> key_ptr,
@@ -298,14 +320,18 @@ external int nativeStowWrite(
   int val_len,
 );
 
-@ffi.Native<ffi.Int32 Function(ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Size)>(symbol: 'stow_remove')
+@ffi.Native<ffi.Int32 Function(ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Size)>(
+  symbol: 'stow_remove',
+)
 external int nativeStowRemove(
   int handle,
   ffi.Pointer<ffi.Uint8> key_ptr,
   int key_len,
 );
 
-@ffi.Native<ffi.Int32 Function(ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Size)>(symbol: 'stow_contains')
+@ffi.Native<ffi.Int32 Function(ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Size)>(
+  symbol: 'stow_contains',
+)
 external int nativeStowContains(
   int handle,
   ffi.Pointer<ffi.Uint8> key_ptr,
@@ -315,7 +341,13 @@ external int nativeStowContains(
 @ffi.Native<ffi.Int64 Function(ffi.Uint64)>(symbol: 'stow_keys_count')
 external int nativeStowKeysCount(int handle);
 
-@ffi.Native<ffi.Int32 Function(ffi.Uint64, ffi.Pointer<ffi.Pointer<ffi.Uint8>>, ffi.Pointer<ffi.Size>)>(symbol: 'stow_get_all_keys')
+@ffi.Native<
+  ffi.Int32 Function(
+    ffi.Uint64,
+    ffi.Pointer<ffi.Pointer<ffi.Uint8>>,
+    ffi.Pointer<ffi.Size>,
+  )
+>(symbol: 'stow_get_all_keys')
 external int nativeStowGetAllKeys(
   int handle,
   ffi.Pointer<ffi.Pointer<ffi.Uint8>> out_keys_ptr,
@@ -331,12 +363,17 @@ external int nativeStowCompact(int handle);
 @ffi.Native<ffi.Int32 Function(ffi.Uint64)>(symbol: 'stow_close')
 external int nativeStowClose(int handle);
 
-@ffi.Native<ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Size)>(symbol: 'stow_free_bytes')
+@ffi.Native<ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Size)>(
+  symbol: 'stow_free_bytes',
+)
 external void nativeStowFreeBytes(ffi.Pointer<ffi.Uint8> ptr, int len);
 
-@ffi.Native<ffi.Void Function(ffi.Pointer<ffi.Char>)>(symbol: 'stow_free_string')
+@ffi.Native<ffi.Void Function(ffi.Pointer<ffi.Char>)>(
+  symbol: 'stow_free_string',
+)
 external void nativeStowFreeString(ffi.Pointer<ffi.Char> ptr);
 
-@ffi.Native<ffi.Int32 Function(ffi.Pointer<ffi.Pointer<ffi.Char>>)>(symbol: 'stow_last_error')
+@ffi.Native<ffi.Int32 Function(ffi.Pointer<ffi.Pointer<ffi.Char>>)>(
+  symbol: 'stow_last_error',
+)
 external int nativeStowLastError(ffi.Pointer<ffi.Pointer<ffi.Char>> out_ptr);
-

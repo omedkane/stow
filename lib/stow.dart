@@ -5,6 +5,7 @@ import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
+
 import 'stow_bindings_generated.dart';
 
 /// A blazing fast native key-value local storage engine for Flutter and Dart.
@@ -24,10 +25,7 @@ class Stow {
   Stow._(this.boxName, this.path, this._handle);
 
   /// Creates a Stow box handle. Call [initialize] or [open] to initialize it.
-  Stow([String? name])
-      : boxName = name ?? 'default',
-        path = null,
-        _handle = 0;
+  Stow([String? name]) : boxName = name ?? 'default', path = null, _handle = 0;
 
   static final Map<String, Stow> _openBoxes = <String, Stow>{};
   static Stow? _defaultBox;
@@ -230,11 +228,7 @@ class Stow {
         final keyPtr = arena<ffi.Uint8>(keyBytes.length);
         keyPtr.asTypedList(keyBytes.length).setAll(0, keyBytes);
 
-        final res = nativeStowRemove(
-          handle,
-          keyPtr,
-          keyBytes.length,
-        );
+        final res = nativeStowRemove(handle, keyPtr, keyBytes.length);
 
         if (res < 0) {
           throw StowException('stow_remove failed with code: $res');
@@ -254,11 +248,7 @@ class Stow {
       final keyPtr = arena<ffi.Uint8>(keyBytes.length);
       keyPtr.asTypedList(keyBytes.length).setAll(0, keyBytes);
 
-      final res = nativeStowRemove(
-        _handle,
-        keyPtr,
-        keyBytes.length,
-      );
+      final res = nativeStowRemove(_handle, keyPtr, keyBytes.length);
 
       if (res < 0) {
         throw StowException('stow_remove failed: ${_getErrorMessage(res)}');
@@ -396,7 +386,8 @@ Uint8List? readSync(String key) => Stow.instance.readSync(key);
 Future<Uint8List?> readAsync(String key) => Stow.instance.readAsync(key);
 
 /// Asynchronously writes raw [value] bytes for [key] to the default/active box.
-Future<void> write(String key, Uint8List value) => Stow.instance.write(key, value);
+Future<void> write(String key, Uint8List value) =>
+    Stow.instance.write(key, value);
 
 /// Asynchronously removes [key] from the default/active box.
 Future<bool> remove(String key) => Stow.instance.remove(key);

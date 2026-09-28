@@ -17,47 +17,59 @@ void main() {
     }
   });
 
-  test('initialize, write async, readSync, readAsync, remove async with raw bytes', () async {
-    final box = await stow.initialize('test_box_1', path: tempDir.path);
+  test(
+    'initialize, write async, readSync, readAsync, remove async with raw bytes',
+    () async {
+      final box = await stow.initialize('test_box_1', path: tempDir.path);
 
-    expect(box.boxName, equals('test_box_1'));
-    expect(box.length, equals(0));
+      expect(box.boxName, equals('test_box_1'));
+      expect(box.length, equals(0));
 
-    // Arbitrary binary bytes (including zeroes, 255, non-utf8 sequence)
-    final rawBytes = Uint8List.fromList([0x00, 0xFF, 0xFE, 0x80, 0x7F, 0x42, 0x13, 0x37]);
-    const key = 'binary_data_key';
+      // Arbitrary binary bytes (including zeroes, 255, non-utf8 sequence)
+      final rawBytes = Uint8List.fromList([
+        0x00,
+        0xFF,
+        0xFE,
+        0x80,
+        0x7F,
+        0x42,
+        0x13,
+        0x37,
+      ]);
+      const key = 'binary_data_key';
 
-    // 1. Write asynchronous
-    await box.write(key, rawBytes);
-    expect(box.length, equals(1));
-    expect(box.contains(key), isTrue);
+      // 1. Write asynchronous
+      await box.write(key, rawBytes);
+      expect(box.length, equals(1));
+      expect(box.contains(key), isTrue);
 
-    // 2. readSync
-    final syncResult = box.readSync(key);
-    expect(syncResult, isNotNull);
-    expect(syncResult, equals(rawBytes));
+      // 2. readSync
+      final syncResult = box.readSync(key);
+      expect(syncResult, isNotNull);
+      expect(syncResult, equals(rawBytes));
 
-    // 3. readAsync
-    final asyncResult = await box.readAsync(key);
-    expect(asyncResult, isNotNull);
-    expect(asyncResult, equals(rawBytes));
+      // 3. readAsync
+      final asyncResult = await box.readAsync(key);
+      expect(asyncResult, isNotNull);
+      expect(asyncResult, equals(rawBytes));
 
-    // 4. Non-existent key returns null
-    expect(box.readSync('non_existent_key'), isNull);
-    expect(await box.readAsync('non_existent_key'), isNull);
+      // 4. Non-existent key returns null
+      expect(box.readSync('non_existent_key'), isNull);
+      expect(await box.readAsync('non_existent_key'), isNull);
 
-    // 5. Remove asynchronous
-    final removed = await box.remove(key);
-    expect(removed, isTrue);
-    expect(box.length, equals(0));
-    expect(box.contains(key), isFalse);
-    expect(box.readSync(key), isNull);
-    expect(await box.readAsync(key), isNull);
+      // 5. Remove asynchronous
+      final removed = await box.remove(key);
+      expect(removed, isTrue);
+      expect(box.length, equals(0));
+      expect(box.contains(key), isFalse);
+      expect(box.readSync(key), isNull);
+      expect(await box.readAsync(key), isNull);
 
-    // 6. Removing non-existent key returns false
-    final removedAgain = await box.remove(key);
-    expect(removedAgain, isFalse);
-  });
+      // 6. Removing non-existent key returns false
+      final removedAgain = await box.remove(key);
+      expect(removedAgain, isFalse);
+    },
+  );
 
   test('top-level API works as expected', () async {
     await stow.initialize('top_level_box', path: tempDir.path);

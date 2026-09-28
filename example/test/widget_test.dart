@@ -11,6 +11,9 @@ void main() {
 
     expect(find.text('Stow Local Storage (Rust + FFI)'), findsOneWidget);
     expect(find.text('Stow Demo Completed Successfully!'), findsOneWidget);
-    expect(find.text('5. remove("sample_bytes"): Success (true)'), findsOneWidget);
+    expect(
+      find.text('5. remove("sample_bytes"): Success (true)'),
+      findsOneWidget,
+    );
   });
 }
